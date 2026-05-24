@@ -1,0 +1,184 @@
+.about {
+  padding: 100px 0;
+  background: white;
+}
+
+.about__inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 80px;
+}
+
+/* Visual */
+.about__visual {
+  position: relative;
+}
+
+.about__main-card {
+  position: relative;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  aspect-ratio: 4 / 3.5;
+  background: var(--blue-100);
+}
+
+.about__team-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  display: block;
+  transition: transform 0.5s ease;
+}
+
+.about__main-card:hover .about__team-photo {
+  transform: scale(1.04);
+}
+
+.about__badge {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: white;
+  border-radius: var(--radius-md);
+  padding: 14px 20px;
+  box-shadow: var(--shadow-lg);
+}
+
+.about__badge--years {
+  top: 24px;
+  right: -20px;
+}
+
+.badge-number {
+  font-size: 36px;
+  font-weight: 900;
+  color: var(--blue-500);
+  line-height: 1;
+}
+
+.badge-text {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--gray-600);
+  line-height: 1.3;
+}
+
+.about__float-card {
+  position: absolute;
+  bottom: 20px;
+  left: -20px;
+  background: white;
+  border-radius: var(--radius-md);
+  padding: 14px 18px;
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 2px solid var(--yellow-200);
+  animation: float 6s ease-in-out infinite;
+}
+
+.about__float-card > div {
+  display: flex;
+  flex-direction: column;
+}
+
+.about__float-card strong {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--gray-800);
+}
+
+.about__float-card span {
+  font-size: 11px;
+  color: var(--gray-400);
+  font-weight: 600;
+  line-height: 1.4;
+  margin-top: 2px;
+}
+
+/* Content */
+.about__content {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.about__text {
+  font-size: 16px;
+  color: var(--gray-600);
+  line-height: 1.8;
+  margin-bottom: 16px;
+}
+
+.about__text:last-of-type {
+  margin-bottom: 32px;
+}
+
+.about__highlights {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.about__highlight-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--blue-100);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--gray-800);
+  border: 1.5px solid var(--blue-200);
+}
+
+.highlight-icon {
+  color: var(--blue-500);
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+@media (max-width: 900px) {
+  .about__inner {
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+
+  .about__visual {
+    max-width: 420px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .about__badge--years {
+    right: -10px;
+  }
+
+  .about__float-card {
+    left: -10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .about {
+    padding: 64px 0;
+  }
+
+  .about__highlights {
+    grid-template-columns: 1fr;
+  }
+
+  .about__badge--years {
+    right: 0;
+  }
+
+  .about__float-card {
+    left: 0;
+  }
+}
