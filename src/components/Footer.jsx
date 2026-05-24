@@ -12,8 +12,9 @@ L.Icon.Default.mergeOptions({
   shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
 })
 
-// Clinic location: жк Квартал Крюківщина, вул. Відродження 5, Kyiv area
-const CLINIC_POS = [50.3356, 30.3684]
+// Clinic location: вул. Відродження 5, Крюківщина, Київська обл., 08136
+const CLINIC_POS = [50.376174, 30.390218]
+const MAPS_URL = 'https://maps.app.goo.gl/6eArZnWYadFTx1R59?g_st=it'
 
 const navLinks = [
   { href: '#about', label: 'Про нас' },
@@ -52,7 +53,9 @@ export default function Footer({ onBooking }) {
                 </div>
                 <div>
                   <strong>Адреса</strong>
-                  <span>жк.«Квартал Крюківщина»,<br/>вул. Відродження 5</span>
+                  <a href={MAPS_URL} target="_blank" rel="noopener noreferrer" style={{ color: 'inherit', textDecoration: 'underline', textDecorationColor: 'rgba(0,0,0,0.2)' }}>
+                    вул. Відродження 5, Крюківщина,<br/>Київська обл., 08136
+                  </a>
                 </div>
               </div>
               <div className="footer__contact-item">
@@ -108,7 +111,7 @@ export default function Footer({ onBooking }) {
                     <div style={{ fontSize: 24, marginBottom: 4 }}>🦷</div>
                     <strong style={{ fontSize: 14, color: '#1F2937' }}>Vero.nikadent</strong>
                     <br/>
-                    <span style={{ fontSize: 12, color: '#6B7280' }}>вул. Відродження 5</span>
+                    <span style={{ fontSize: 12, color: '#6B7280' }}>вул. Відродження 5, Крюківщина</span>
                     <br/>
                     <a href="tel:0502121394" style={{ fontSize: 12, color: '#2B90D9', fontWeight: 700 }}>050 212 13 94</a>
                   </div>
@@ -181,7 +184,7 @@ export default function Footer({ onBooking }) {
                 <span>📅 пн–сб, 9:00–20:00</span>
               </li>
               <li>
-                <span>📍 вул. Відродження 5</span>
+                <a href={MAPS_URL} target="_blank" rel="noopener noreferrer">📍 вул. Відродження 5, Крюківщина</a>
               </li>
               <li>
                 <a href="https://www.instagram.com/vero.nikadent/" target="_blank" rel="noopener noreferrer">
