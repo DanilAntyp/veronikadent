@@ -361,4 +361,8 @@
   .hero__card--3 {
     display: none;
   }
+
+  .hero__stats {
+    display: none;
+  }
 }
