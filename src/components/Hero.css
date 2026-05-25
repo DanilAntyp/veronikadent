@@ -341,25 +341,10 @@
 @media (max-width: 480px) {
   .hero {
     padding-top: 80px;
-    min-height: unset;
   }
 
   .hero__inner {
-    gap: 20px;
-    padding-bottom: 100px;
-  }
-
-  .hero__image-wrapper {
-    max-width: 240px;
-  }
-
-  .hero__subtitle {
-    font-size: 15px;
-    margin-bottom: 20px;
-  }
-
-  .hero__actions {
-    margin-bottom: 16px;
+    padding-bottom: 60px;
   }
 
   .hero__card--1 {
@@ -374,10 +359,6 @@
   }
 
   .hero__card--3 {
-    display: none;
-  }
-
-  .hero__stats {
     display: none;
   }
 }
