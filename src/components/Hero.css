@@ -226,7 +226,7 @@
 }
 
 .hero__logo-img {
-  width: 74%;
+  width: 86%;
   height: auto;
   display: block;
   object-fit: contain;
@@ -359,7 +359,7 @@
   }
 
   .hero__card--3 {
-    bottom: 0;
+    bottom: 30%;
     left: -10px;
     font-size: 11px;
   }

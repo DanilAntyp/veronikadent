@@ -24,13 +24,6 @@ export default function About() {
             />
           </div>
 
-          <div className="about__float-card">
-            <span style={{ fontSize: 24 }}>🏆</span>
-            <div>
-              <strong>Клініка року 2024</strong>
-              <span>Найкраща дитяча<br/>стоматологія</span>
-            </div>
-          </div>
         </div>
 
         {/* Text side */}
