@@ -106,6 +106,7 @@ const reviews = [
 ]
 
 const VISIBLE = 3
+const MAX_START = reviews.length - VISIBLE
 
 export default function Reviews() {
   const [start, setStart] = useState(0)
@@ -115,12 +116,12 @@ export default function Reviews() {
     if (animating) return
     setAnimating(true)
     setTimeout(() => {
-      setStart(s => (s + dir + reviews.length) % reviews.length)
+      setStart(s => Math.max(0, Math.min(s + dir, MAX_START)))
       setAnimating(false)
     }, 280)
   }, [animating])
 
-  const visible = Array.from({ length: VISIBLE }, (_, i) => reviews[(start + i) % reviews.length])
+  const visible = reviews.slice(start, start + VISIBLE)
 
   return (
     <section className="reviews" id="reviews">
@@ -152,7 +153,7 @@ export default function Reviews() {
             <div className="platform-badge">
               <span>🗺️</span>
               <span>Google Maps</span>
-              <strong>4.9</strong>
+              <strong>5.0</strong>
             </div>
           </div>
         </div>
@@ -178,22 +179,14 @@ export default function Reviews() {
 
               <p className="review-text">"{r.text}"</p>
 
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8 }}>
-                <span
-                  className="review-tag"
-                  style={{ background: r.tagColor, color: r.tagAccent }}
-                >
-                  {r.tag}
-                </span>
-                <a
-                  href="https://maps.app.goo.gl/6eArZnWYadFTx1R59"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, color: '#6B7280', textDecoration: 'none', fontWeight: 600 }}
-                >
-                  <span>🗺️</span> Google Maps
-                </a>
-              </div>
+              <a
+                href="https://maps.app.goo.gl/6eArZnWYadFTx1R59"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 11, color: '#6B7280', textDecoration: 'none', fontWeight: 600 }}
+              >
+                <span>🗺️</span> Google Maps
+              </a>
             </div>
           ))}
         </div>
@@ -204,7 +197,7 @@ export default function Reviews() {
             <FiChevronLeft size={20}/>
           </button>
           <div className="gallery__dots">
-            {reviews.map((_, i) => (
+            {Array.from({ length: MAX_START + 1 }, (_, i) => (
               <button
                 key={i}
                 className={`gallery__dot ${i === start ? 'gallery__dot--active' : ''}`}

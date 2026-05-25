@@ -13,7 +13,7 @@ L.Icon.Default.mergeOptions({
 })
 
 // Clinic location: вул. Відродження 5, Крюківщина, Київська обл., 08136
-const CLINIC_POS = [50.376174, 30.390218]
+const CLINIC_POS = [50.3812693, 30.3845729]
 const MAPS_URL = 'https://maps.app.goo.gl/6eArZnWYadFTx1R59?g_st=it'
 
 const navLinks = [
@@ -53,7 +53,7 @@ export default function Footer({ onBooking }) {
                 </div>
                 <div>
                   <strong>Адреса</strong>
-                  <a href={MAPS_URL} target="_blank" rel="noopener noreferrer" style={{ color: 'inherit', textDecoration: 'underline', textDecorationColor: 'rgba(0,0,0,0.2)' }}>
+                  <a href={MAPS_URL} target="_blank" rel="noopener noreferrer">
                     вул. Відродження 5, Крюківщина,<br/>Київська обл., 08136
                   </a>
                 </div>
@@ -96,7 +96,7 @@ export default function Footer({ onBooking }) {
           <div className="footer__map-wrapper">
             <MapContainer
               center={CLINIC_POS}
-              zoom={15}
+              zoom={17}
               scrollWheelZoom={false}
               style={{ width: '100%', height: '100%', borderRadius: '24px' }}
               className="footer__leaflet"

@@ -5,7 +5,6 @@ import './Hero.css'
 
 const stats = [
   { icon: <FiStar />, value: '5.0', label: 'Рейтинг' },
-  { icon: <FiShield />, value: '7+', label: 'Років досвіду' },
   { icon: <FiHeart />, value: '2000+', label: 'Щасливих пацієнтів' },
 ]
 
