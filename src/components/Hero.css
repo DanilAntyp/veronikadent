@@ -344,7 +344,21 @@
   }
 
   .hero__inner {
-    padding-bottom: 120px;
+    gap: 20px;
+    padding-bottom: 140px;
+  }
+
+  .hero__image-wrapper {
+    max-width: 240px;
+  }
+
+  .hero__subtitle {
+    font-size: 15px;
+    margin-bottom: 20px;
+  }
+
+  .hero__actions {
+    margin-bottom: 16px;
   }
 
   .hero__card--1 {
