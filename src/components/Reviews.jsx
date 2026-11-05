@@ -1,6 +1,8 @@
-import React, { useState, useCallback } from 'react'
-import { FiChevronLeft, FiChevronRight, FiStar } from 'react-icons/fi'
+import React from 'react'
+import { FiStar } from 'react-icons/fi'
 import './Reviews.css'
+
+const MAPS = 'https://maps.app.goo.gl/6eArZnWYadFTx1R59'
 
 const reviews = [
   {
@@ -105,110 +107,70 @@ const reviews = [
   },
 ]
 
-const VISIBLE = 3
-const MAX_START = reviews.length - VISIBLE
+const initials = (n) => n.split(' ').map((p) => p[0]).slice(0, 2).join('')
+const tones = ['blue', 'rose', 'mint', 'butter', 'violet']
+
+function Card({ r, i }) {
+  return (
+    <a href={MAPS} target="_blank" rel="noopener noreferrer" className={`rv rv--${tones[i % tones.length]}`}>
+      <div className="rv__stars">
+        {[...Array(r.rating)].map((_, j) => <FiStar key={j} size={16} fill="currentColor" />)}
+      </div>
+      <p className="rv__text">{r.text}</p>
+      <div className="rv__author">
+        <span className="rv__ava">{initials(r.name)}</span>
+        <div>
+          <strong>{r.name}</strong>
+          <small>{r.tag} · Google Maps</small>
+        </div>
+      </div>
+    </a>
+  )
+}
+
+function Row({ items, reverse, offset }) {
+  return (
+    <div className={`rv-row ${reverse ? 'rv-row--rev' : ''}`}>
+      <div className="rv-row__track">
+        {[0, 1].map((k) => (
+          <div className="rv-row__set" key={k} aria-hidden={k > 0}>
+            {items.map((r, i) => <Card key={i} r={r} i={i + offset} />)}
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
 
 export default function Reviews() {
-  const [start, setStart] = useState(0)
-  const [animating, setAnimating] = useState(false)
-
-  const shift = useCallback((dir) => {
-    if (animating) return
-    setAnimating(true)
-    setTimeout(() => {
-      setStart(s => Math.max(0, Math.min(s + dir, MAX_START)))
-      setAnimating(false)
-    }, 280)
-  }, [animating])
-
-  const visible = reviews.slice(start, start + VISIBLE)
-
+  const half = Math.ceil(reviews.length / 2)
   return (
-    <section className="reviews" id="reviews">
-      <div className="reviews__blob" />
-      <div className="container">
-        <div className="reviews__header" data-reveal="up">
-          <span className="section-tag">Відгуки</span>
-          <h2 className="section-title">Що кажуть наші пацієнти</h2>
-          <p className="section-subtitle">
-            Більше 2000 щасливих усмішок. Читайте справжні відгуки від наших пацієнтів.
+    <section className="reviews section" id="reviews">
+      <div className="container reviews__head">
+        <div>
+          <span className="eyebrow" data-reveal>Відгуки</span>
+          <h2 className="h2" data-reveal style={{ '--d': '60ms' }}>
+            «Вероніка Павлівна —<br /><em>чарівниця</em>»
+          </h2>
+          <p className="lead" data-reveal style={{ '--d': '120ms' }}>
+            Справжні відгуки батьків і пацієнтів з Google Maps.
           </p>
         </div>
 
-        {/* Rating summary */}
-        <div className="reviews__summary" data-reveal="zoom">
-          <div className="reviews__rating-big">
-            <span className="rating-number">5.0</span>
-            <div className="rating-stars">
-              {[...Array(5)].map((_, i) => <FiStar key={i} size={20} fill="#FBBF24" color="#FBBF24"/>)}
-            </div>
-            <span className="rating-count">на основі 200+ відгуків</span>
-          </div>
-          <div className="reviews__platforms">
-            <div className="platform-badge">
-              <span>📱</span>
-              <span>Instagram</span>
-              <strong>5.0</strong>
-            </div>
-            <div className="platform-badge">
-              <span>🗺️</span>
-              <span>Google Maps</span>
-              <strong>5.0</strong>
-            </div>
-          </div>
+        <div data-reveal="zoom">
+        <a href={MAPS} target="_blank" rel="noopener noreferrer" className="score" data-tilt="8">
+          <span className="score__num">5.0</span>
+          <span className="score__stars">
+            {[...Array(5)].map((_, i) => <FiStar key={i} size={22} fill="currentColor" style={{ '--i': i }} />)}
+          </span>
+          <span className="score__label">рейтинг у Google Maps</span>
+        </a>
         </div>
+      </div>
 
-        {/* Cards */}
-        <div className={`reviews__grid ${animating ? 'reviews__grid--fade' : ''}`}>
-          {visible.map((r, i) => (
-            <div key={`${start}-${i}`} className="review-card">
-              <div className="review-card__top">
-                <div className="review-card__author">
-                  <span className="review-avatar">{r.avatar}</span>
-                  <div>
-                    <strong className="review-name">{r.name}</strong>
-                    <span className="review-date">{r.date}</span>
-                  </div>
-                </div>
-                <div className="review-stars">
-                  {[...Array(r.rating)].map((_, j) => (
-                    <FiStar key={j} size={14} fill="#FBBF24" color="#FBBF24"/>
-                  ))}
-                </div>
-              </div>
-
-              <p className="review-text">"{r.text}"</p>
-
-              <a
-                href="https://maps.app.goo.gl/6eArZnWYadFTx1R59"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 11, color: '#6B7280', textDecoration: 'none', fontWeight: 600 }}
-              >
-                <span>🗺️</span> Google Maps
-              </a>
-            </div>
-          ))}
-        </div>
-
-        {/* Navigation */}
-        <div className="reviews__nav">
-          <button className="gallery__btn" onClick={() => shift(-1)}>
-            <FiChevronLeft size={20}/>
-          </button>
-          <div className="gallery__dots">
-            {Array.from({ length: MAX_START + 1 }, (_, i) => (
-              <button
-                key={i}
-                className={`gallery__dot ${i === start ? 'gallery__dot--active' : ''}`}
-                onClick={() => { if (!animating) { setStart(i) } }}
-              />
-            ))}
-          </div>
-          <button className="gallery__btn" onClick={() => shift(1)}>
-            <FiChevronRight size={20}/>
-          </button>
-        </div>
+      <div className="reviews__rows" data-reveal="fade">
+        <Row items={reviews.slice(0, half)} offset={0} />
+        <Row items={reviews.slice(half)} offset={1} reverse />
       </div>
     </section>
   )

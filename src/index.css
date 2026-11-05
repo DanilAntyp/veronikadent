@@ -1,226 +1,227 @@
-*, *::before, *::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --blue-100: #E8F4FD;
-  --blue-200: #C5E4F8;
-  --blue-300: #93CCF0;
-  --blue-400: #5AB0E8;
-  --blue-500: #2B90D9;
-  --pink-100: #FDE8EE;
-  --pink-200: #F8C5D5;
-  --pink-300: #F093B0;
-  --pink-400: #E8608A;
-  --mint-100: #E8FDF4;
-  --mint-200: #C5F0DF;
-  --yellow-100: #FDF6E8;
-  --yellow-200: #F8E5C5;
-  --white: #FFFFFF;
-  --gray-50: #F9FAFB;
-  --gray-100: #F3F4F6;
-  --gray-200: #E5E7EB;
-  --gray-400: #9CA3AF;
-  --gray-600: #6B7280;
-  --gray-800: #1F2937;
-  --font-main: 'Nunito', sans-serif;
-  --font-display: 'Playfair Display', serif;
-  --shadow-sm: 0 2px 8px rgba(42, 100, 160, 0.08);
-  --shadow-md: 0 4px 20px rgba(42, 100, 160, 0.12);
-  --shadow-lg: 0 8px 40px rgba(42, 100, 160, 0.16);
-  --radius-sm: 12px;
-  --radius-md: 20px;
-  --radius-lg: 32px;
-  --radius-xl: 48px;
-  --radius-full: 9999px;
+  /* Палітра бренду: блакитний з логотипа, пудровий з інтер'єру, кремовий з прайсу */
+  --cream: #FBF6F0;
+  --cream-2: #F4ECE2;
+  --paper: #FFFDFA;
+  --ink: #14263F;
+  --ink-2: #33455E;
+  --muted: #6B7A8F;
+  --line: rgba(20, 38, 63, 0.1);
+
+  --blue: #3F82C8;
+  --blue-deep: #1E5A9C;
+  --blue-soft: #DCEAF7;
+  --sky: #A8CAEC;
+  --rose: #EC9C97;
+  --rose-deep: #D46F6A;
+  --rose-soft: #FBE2DE;
+  --butter: #F6C453;
+  --butter-soft: #FDF0CC;
+  --mint: #5DBE9A;
+  --mint-soft: #D7F1E6;
+  --violet: #8B7BE0;
+  --violet-soft: #E7E3FA;
+
+  --f-display: 'Unbounded', system-ui, sans-serif;
+  --f-body: 'Onest', system-ui, sans-serif;
+
+  --r-sm: 14px;
+  --r-md: 22px;
+  --r-lg: 32px;
+  --r-xl: 44px;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --shadow: 0 1px 2px rgba(20,38,63,.04), 0 8px 24px rgba(20,38,63,.06);
+  --shadow-lg: 0 2px 6px rgba(20,38,63,.05), 0 24px 60px rgba(20,38,63,.12);
+  --gutter: clamp(16px, 4vw, 40px);
 }
 
-html {
-  scroll-behavior: smooth;
-}
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
 
 body {
-  font-family: var(--font-main);
-  color: var(--gray-800);
-  background: var(--white);
+  font-family: var(--f-body);
+  color: var(--ink);
+  background: var(--cream);
   line-height: 1.6;
   overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
 }
 
-h1, h2, h3, h4 {
-  line-height: 1.2;
-  font-weight: 800;
+/* Плівкове зерно поверх усього — дає «друкований» теплий вигляд */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: .05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-img {
-  max-width: 100%;
-  display: block;
-}
+::selection { background: var(--rose); color: var(--ink); }
 
-a {
-  text-decoration: none;
-  color: inherit;
-}
+h1, h2, h3, h4 { font-family: var(--f-display); line-height: 1.05; font-weight: 700; letter-spacing: -0.02em; text-wrap: balance; }
+p { text-wrap: pretty; }
+img { max-width: 100%; display: block; }
+a { text-decoration: none; color: inherit; }
+button { cursor: pointer; border: none; background: none; font: inherit; color: inherit; }
+input { font: inherit; color: inherit; }
 
-button {
-  cursor: pointer;
-  border: none;
-  font-family: var(--font-main);
-}
+.container { max-width: 1240px; margin: 0 auto; padding: 0 var(--gutter); }
 
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 24px;
-}
+section { position: relative; }
+.section { padding: clamp(80px, 12vw, 150px) 0; }
 
-.section-tag {
-  display: inline-block;
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--blue-500);
-  background: var(--blue-100);
-  padding: 6px 16px;
-  border-radius: var(--radius-full);
-  margin-bottom: 16px;
-}
-
-.section-title {
-  font-size: clamp(28px, 4vw, 44px);
-  font-weight: 800;
-  color: var(--gray-800);
-  margin-bottom: 16px;
-}
-
-.section-subtitle {
-  font-size: 17px;
-  color: var(--gray-600);
-  max-width: 560px;
-  line-height: 1.7;
-}
-
-.btn-primary {
+/* ── Типографіка секцій ── */
+.eyebrow {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  background: linear-gradient(135deg, #5AB0E8, #2B90D9);
-  color: white;
-  padding: 14px 32px;
-  border-radius: var(--radius-full);
-  font-size: 16px;
+  gap: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  margin-bottom: 22px;
+}
+.eyebrow::before {
+  content: '';
+  width: 28px;
+  height: 2px;
+  border-radius: 2px;
+  background: currentColor;
+  opacity: .5;
+}
+.h2 {
+  font-size: clamp(34px, 6vw, 76px);
   font-weight: 700;
-  font-family: var(--font-main);
-  box-shadow: 0 4px 16px rgba(43, 144, 217, 0.35);
-  transition: all 0.3s ease;
-  border: none;
-  cursor: pointer;
+  margin-bottom: 20px;
+}
+.h2 em {
+  font-style: normal;
+  color: var(--blue);
+  position: relative;
   white-space: nowrap;
 }
+.lead { font-size: clamp(16px, 1.6vw, 19px); color: var(--muted); max-width: 560px; }
 
-.btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(43, 144, 217, 0.45);
-  background: linear-gradient(135deg, #6BBDEE, #3A9FE8);
-}
-
-.btn-secondary {
+/* ── Кнопки ── */
+.btn {
+  --bg: var(--ink);
+  --fg: var(--cream);
+  position: relative;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  background: white;
-  color: var(--blue-500);
-  padding: 13px 30px;
-  border-radius: var(--radius-full);
+  justify-content: center;
+  gap: 10px;
+  padding: 18px 30px;
+  border-radius: 999px;
+  background: var(--bg);
+  color: var(--fg);
+  font-weight: 600;
   font-size: 16px;
-  font-weight: 700;
-  font-family: var(--font-main);
-  border: 2px solid var(--blue-300);
-  transition: all 0.3s ease;
-  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  isolation: isolate;
+  transition: transform .5s var(--ease), box-shadow .4s var(--ease), color .4s var(--ease);
+  will-change: transform;
 }
+.btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--blue);
+  border-radius: inherit;
+  transform: translateY(101%);
+  transition: transform .5s var(--ease);
+}
+.btn:hover::before { transform: translateY(0); }
+.btn:hover { box-shadow: 0 14px 40px rgba(63,130,200,.35); }
+.btn:active { transform: scale(.97); }
+.btn svg { transition: transform .4s var(--ease); }
+.btn:hover svg { transform: rotate(-12deg) scale(1.1); }
 
-.btn-secondary:hover {
-  background: var(--blue-100);
-  border-color: var(--blue-400);
-}
+.btn--ghost { --bg: transparent; --fg: var(--ink); box-shadow: inset 0 0 0 1.5px var(--ink); }
+.btn--ghost::before { background: var(--ink); }
+.btn--ghost:hover { color: var(--cream); box-shadow: inset 0 0 0 1.5px var(--ink); }
+.btn--light { --bg: var(--cream); --fg: var(--ink); }
+.btn--light::before { background: var(--butter); }
+.btn--sm { padding: 12px 20px; font-size: 14px; }
 
-/* Swiper custom styles */
-.swiper-pagination-bullet {
-  background: var(--blue-300) !important;
-  opacity: 0.5 !important;
-}
-.swiper-pagination-bullet-active {
-  background: var(--blue-500) !important;
-  opacity: 1 !important;
-}
-
-/* Animations */
-@keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-12px); }
-}
-
-@keyframes floatReverse {
-  0%, 100% { transform: translateY(-8px); }
-  50% { transform: translateY(4px); }
-}
-
-@keyframes pulse-soft {
-  0%, 100% { transform: scale(1); opacity: 0.7; }
-  50% { transform: scale(1.05); opacity: 1; }
-}
-
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(30px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.fade-in-up {
-  animation: fadeInUp 0.7s ease forwards;
-}
-
-/* ── Scroll-reveal ───────────────────────────────────────────── */
-/*
- * Hidden by default. We use CSS *animations* (not transitions) so that:
- *   - The stagger delay lives in animation-delay (via --reveal-delay var)
- *   - Hover/active transitions on the same element are completely unaffected
- *   - React's className reconciliation cannot wipe the reveal state
- *     (we use data-revealed attribute, not a class)
- */
+/* ── Scroll-reveal ── */
 [data-reveal] { opacity: 0; }
+[data-reveal][data-revealed] { animation: rv-up .9s var(--ease) var(--d, 0ms) both; }
+[data-reveal='left'][data-revealed] { animation-name: rv-left; }
+[data-reveal='right'][data-revealed] { animation-name: rv-right; }
+[data-reveal='zoom'][data-revealed] { animation-name: rv-zoom; }
+[data-reveal='fade'][data-revealed] { animation-name: rv-fade; }
+[data-reveal='clip'][data-revealed] { animation: rv-clip 1.3s var(--ease) var(--d, 0ms) both; }
 
-/* Revealed – fire the matching keyframe animation */
-[data-reveal='up'][data-revealed] {
-  animation: rv-up 0.65s cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0ms) both;
-}
-[data-reveal='down'][data-revealed] {
-  animation: rv-down 0.65s cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0ms) both;
-}
-[data-reveal='left'][data-revealed] {
-  animation: rv-left 0.65s cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0ms) both;
-}
-[data-reveal='right'][data-revealed] {
-  animation: rv-right 0.65s cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0ms) both;
-}
-[data-reveal='zoom'][data-revealed] {
-  animation: rv-zoom 0.65s cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0ms) both;
-}
-[data-reveal='fade'][data-revealed] {
-  animation: rv-fade 0.65s cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0ms) both;
+@keyframes rv-up    { from { opacity: 0; transform: translateY(60px); } to { opacity: 1; transform: none; } }
+@keyframes rv-left  { from { opacity: 0; transform: translateX(-60px); } to { opacity: 1; transform: none; } }
+@keyframes rv-right { from { opacity: 0; transform: translateX(60px); } to { opacity: 1; transform: none; } }
+@keyframes rv-zoom  { from { opacity: 0; transform: scale(.85); } to { opacity: 1; transform: none; } }
+@keyframes rv-fade  { from { opacity: 0; } to { opacity: 1; } }
+@keyframes rv-clip  { from { opacity: 1; clip-path: inset(20% 20% 20% 20% round 300px); transform: scale(1.1); } to { opacity: 1; clip-path: inset(0 0 0 0 round var(--r-xl)); transform: none; } }
+
+/* Маскований підйом рядків заголовків */
+.line-mask { display: block; overflow: hidden; padding-bottom: .08em; margin-bottom: -.08em; }
+.line-mask > span { display: inline-block; transform: translateY(110%); }
+[data-revealed] .line-mask > span,
+.is-in .line-mask > span { animation: line-up 1.1s var(--ease) both; animation-delay: calc(var(--i, 0) * 90ms + var(--d, 0ms)); }
+@keyframes line-up { to { transform: none; } }
+
+/* Шкала прогресу прокрутки */
+.scroll-progress {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  z-index: 1001;
+  transform-origin: 0 50%;
+  transform: scaleX(var(--p, 0));
+  background: linear-gradient(90deg, var(--blue), var(--rose), var(--butter));
 }
 
-@keyframes rv-up    { from { opacity: 0; transform: translateY(50px); } to { opacity: 1; transform: none; } }
-@keyframes rv-down  { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: none; } }
-@keyframes rv-left  { from { opacity: 0; transform: translateX(-50px); } to { opacity: 1; transform: none; } }
-@keyframes rv-right { from { opacity: 0; transform: translateX(50px);  } to { opacity: 1; transform: none; } }
-@keyframes rv-zoom  { from { opacity: 0; transform: scale(0.88);       } to { opacity: 1; transform: none; } }
-@keyframes rv-fade  { from { opacity: 0; }                               to { opacity: 1; } }
+/* Кастомний курсор (лише миша) */
+.cursor {
+  position: fixed;
+  top: 0; left: 0;
+  width: 14px; height: 14px;
+  margin: -7px 0 0 -7px;
+  border-radius: 50%;
+  background: var(--blue);
+  border: 2px solid #fff;
+  box-shadow: 0 2px 10px rgba(20,38,63,.25);
+  pointer-events: none;
+  z-index: 10000;
+  transition: width .35s var(--ease), height .35s var(--ease), margin .35s var(--ease), opacity .3s, background .3s;
+  opacity: 0;
+}
+.cursor.is-visible { opacity: 1; }
+.cursor.is-hover { width: 56px; height: 56px; margin: -28px 0 0 -28px; background: rgba(63,130,200,.18); backdrop-filter: blur(2px); }
+@media (hover: none), (pointer: coarse) { .cursor { display: none; } }
 
-/* Leaflet fix */
-.leaflet-container {
-  font-family: var(--font-main) !important;
+/* Плаваюча кнопка запису на мобільному */
+.float-cta {
+  position: fixed;
+  left: 16px; right: 16px; bottom: 16px;
+  z-index: 900;
+  display: none;
+  transform: translateY(140%);
+  transition: transform .6s var(--ease);
+}
+.float-cta.is-on { transform: none; }
+.float-cta .btn { width: 100%; box-shadow: 0 12px 40px rgba(20,38,63,.3); }
+@media (max-width: 760px) { .float-cta { display: block; } }
+
+/* Leaflet */
+.leaflet-container { font-family: var(--f-body) !important; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+  [data-reveal] { opacity: 1; }
+  .line-mask > span { transform: none; }
 }

@@ -1,80 +1,100 @@
-import React, { useState } from 'react'
-import { FiPhone, FiMenu, FiX } from 'react-icons/fi'
-import logoImg from '../images/logo/logo.png'
+import React, { useEffect, useState } from 'react'
+import { FiPhone, FiArrowUpRight, FiInstagram } from 'react-icons/fi'
+import Logo from './Logo'
 import './Header.css'
 
 const navLinks = [
   { href: '#about', label: 'Про нас' },
   { href: '#services', label: 'Послуги' },
-  { href: '#doctors', label: 'Наші лікарі' },
+  { href: '#prices', label: 'Ціни' },
+  { href: '#doctors', label: 'Лікарі' },
   { href: '#reviews', label: 'Відгуки' },
-  { href: '#footer', label: 'Контакти' },
+  { href: '#contacts', label: 'Контакти' },
 ]
 
-export default function Header({ isScrolled, onBooking }) {
-  const [menuOpen, setMenuOpen] = useState(false)
+export default function Header({ onBooking }) {
+  const [open, setOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
+  const [hidden, setHidden] = useState(false)
 
-  const handleNav = (e, href) => {
+  useEffect(() => {
+    let last = scrollY
+    const onScroll = () => {
+      const y = scrollY
+      setScrolled(y > 40)
+      setHidden(y > 500 && y > last + 4)
+      if (y < last - 4) setHidden(false)
+      last = y
+    }
+    addEventListener('scroll', onScroll, { passive: true })
+    return () => removeEventListener('scroll', onScroll)
+  }, [])
+
+  useEffect(() => {
+    document.body.style.overflow = open ? 'hidden' : ''
+  }, [open])
+
+  const go = (e, href) => {
     e.preventDefault()
-    setMenuOpen(false)
-    const el = document.querySelector(href)
-    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    setOpen(false)
+    document.querySelector(href)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
 
   return (
-    <header className={`header ${isScrolled ? 'header--scrolled' : ''}`}>
-      <div className="container header__inner">
-        {/* Logo */}
-        <a href="#" className="header__logo" onClick={e => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }) }}>
-          <img src={logoImg} alt="Vero.nikadent" className="logo-img" />
-        </a>
+    <>
+      <header className={`hdr ${scrolled ? 'hdr--scrolled' : ''} ${hidden && !open ? 'hdr--hidden' : ''}`}>
+        <div className="hdr__bar">
+          <a href="#top" className="hdr__logo" onClick={(e) => { e.preventDefault(); setOpen(false); scrollTo({ top: 0, behavior: 'smooth' }) }} aria-label="На початок">
+            <Logo />
+          </a>
 
-        {/* Desktop Nav */}
-        <nav className="header__nav">
-          {navLinks.map(link => (
-            <a key={link.href} href={link.href} onClick={e => handleNav(e, link.href)}>
-              {link.label}
+          <nav className="hdr__nav" aria-label="Основна навігація">
+            {navLinks.map((l) => (
+              <a key={l.href} href={l.href} onClick={(e) => go(e, l.href)} className="hdr__link">
+                <span className="hdr__clip"><span data-text={l.label}>{l.label}</span></span>
+              </a>
+            ))}
+          </nav>
+
+          <div className="hdr__actions">
+            <a href="tel:0502121394" className="hdr__phone">
+              <span className="hdr__phone-icon"><FiPhone size={15} /></span>
+              <span>050 212 13 94</span>
+            </a>
+            <button className="btn btn--sm hdr__cta" onClick={onBooking} data-magnetic>
+              Записатися <FiArrowUpRight size={16} />
+            </button>
+            <button
+              className={`hdr__burger ${open ? 'is-open' : ''}`}
+              onClick={() => setOpen((v) => !v)}
+              aria-label={open ? 'Закрити меню' : 'Відкрити меню'}
+              aria-expanded={open}
+            >
+              <span /><span />
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <div className={`menu ${open ? 'menu--open' : ''}`} aria-hidden={!open}>
+        <div className="menu__bg" />
+        <nav className="menu__nav">
+          {navLinks.map((l, i) => (
+            <a key={l.href} href={l.href} onClick={(e) => go(e, l.href)} style={{ '--i': i }} tabIndex={open ? 0 : -1}>
+              <small>0{i + 1}</small>{l.label}
             </a>
           ))}
         </nav>
-
-        {/* Contact + CTA */}
-        <div className="header__actions">
-          <a href="tel:0502121394" className="header__phone">
-            <FiPhone size={16} />
-            <span>050 212 13 94</span>
+        <div className="menu__bottom">
+          <a href="tel:0502121394" className="menu__phone" tabIndex={open ? 0 : -1}>050 212 13 94</a>
+          <a href="https://www.instagram.com/vero.nikadent/" target="_blank" rel="noopener noreferrer" className="menu__ig" tabIndex={open ? 0 : -1}>
+            <FiInstagram /> @vero.nikadent
           </a>
-          <span className="header__hours">пн–сб</span>
-          <button className="btn-primary header__cta" onClick={onBooking}>
-            Записатися онлайн
-          </button>
-        </div>
-
-        {/* Mobile Toggle */}
-        <button className="header__burger" onClick={() => setMenuOpen(v => !v)} aria-label="Меню">
-          {menuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
-        </button>
-      </div>
-
-      {/* Mobile Menu */}
-      <div className={`header__mobile ${menuOpen ? 'header__mobile--open' : ''}`}>
-        <nav>
-          {navLinks.map(link => (
-            <a key={link.href} href={link.href} onClick={e => handleNav(e, link.href)}>
-              {link.label}
-            </a>
-          ))}
-        </nav>
-        <div className="header__mobile-bottom">
-          <a href="tel:0502121394" className="header__phone">
-            <FiPhone size={16} />
-            <span>050 212 13 94</span>
-          </a>
-          <button className="btn-primary" onClick={() => { setMenuOpen(false); onBooking() }}>
-            Записатися онлайн
+          <button className="btn btn--light" onClick={() => { setOpen(false); onBooking() }} tabIndex={open ? 0 : -1}>
+            Записатися на прийом
           </button>
         </div>
       </div>
-    </header>
+    </>
   )
 }

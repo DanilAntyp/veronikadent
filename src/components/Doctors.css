@@ -1,144 +1,99 @@
-.doctors {
-  padding: 100px 0;
-  background: white;
-  position: relative;
-  overflow: hidden;
+.doctors { overflow: hidden; }
+.doctors__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 24px;
+  margin-bottom: clamp(36px, 5vw, 60px);
 }
-
-.doctors__blob {
-  position: absolute;
-  bottom: -150px;
-  left: -150px;
-  width: 500px;
-  height: 500px;
-  background: radial-gradient(circle, rgba(248,197,213,0.2) 0%, transparent 70%);
+.doctors__nav { display: flex; gap: 10px; }
+.doctors__nav button {
+  width: 60px; height: 60px;
   border-radius: 50%;
-  pointer-events: none;
+  display: grid; place-items: center;
+  box-shadow: inset 0 0 0 1.5px var(--ink);
+  transition: background .3s, color .3s, transform .4s var(--ease);
 }
+.doctors__nav button:hover { background: var(--ink); color: var(--cream); transform: scale(1.06); }
 
-.doctors__header {
-  text-align: center;
-  margin-bottom: 64px;
+.doctors__track {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding-left: max(var(--gutter), calc((100vw - 1240px) / 2 + var(--gutter)));
+  padding: 10px max(var(--gutter), calc((100vw - 1240px) / 2 + var(--gutter))) 30px;
+  scrollbar-width: none;
+  cursor: grab;
 }
+.doctors__track::-webkit-scrollbar { display: none; }
+.doctors__track.is-drag { cursor: grabbing; scroll-snap-type: none; user-select: none; }
+.doc-spacer { flex: 0 0 1px; }
 
-.doctors__header .section-subtitle {
-  margin: 0 auto;
-}
-
-.doctors__grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 28px;
-}
-
-
-/* Doctor Card */
-.doctor-card {
-  background: var(--doc-color, var(--blue-100));
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-  border: 2px solid transparent;
-}
-
-.doctor-card:hover {
-  transform: translateY(-10px);
-  box-shadow: var(--shadow-lg);
-  border-color: var(--doc-accent);
-}
-
-/* Photo */
-.doctor-card__avatar {
+.doc-wrap { flex: 0 0 auto; scroll-snap-align: start; }
+.doc {
+  --tone: var(--blue-soft);
+  --deep: var(--blue-deep);
   position: relative;
+  width: clamp(270px, 28vw, 340px);
+  height: clamp(420px, 46vw, 520px);
+  border-radius: var(--r-lg);
   overflow: hidden;
-  aspect-ratio: 3 / 3.5;
-  background: var(--doc-color, var(--blue-100));
+  background: var(--tone);
+  isolation: isolate;
 }
+.doc--rose { --tone: var(--rose-soft); --deep: var(--rose-deep); }
+.doc--mint { --tone: var(--mint-soft); --deep: #2E9C74; }
+.doc--butter { --tone: var(--butter-soft); --deep: #B07F0C; }
+.doc--violet { --tone: var(--violet-soft); --deep: #6655C9; }
 
-.doctor-card__avatar img {
-  width: 100%;
-  height: 100%;
+.doc__photo { position: absolute; inset: 0; z-index: -1; }
+.doc__photo img {
+  width: 100%; height: 100%;
   object-fit: cover;
-  object-position: top center;
-  display: block;
-  transition: transform 0.5s ease;
+  object-position: 50% 20%;
+  transition: transform 1.2s var(--ease), filter .6s;
+}
+.doc:hover .doc__photo img { transform: scale(1.08); }
+.doc__photo::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 40%, rgba(20,38,63,.85) 100%);
+  transition: opacity .5s;
 }
 
-.doctor-card:hover .doctor-card__avatar img {
-  transform: scale(1.06);
-}
-
-.doctor-card__info {
-  padding: 24px;
-}
-
-.doctor-card__name {
-  font-size: 18px;
-  font-weight: 800;
-  color: var(--gray-800);
-  margin-bottom: 4px;
-  line-height: 1.25;
-}
-
-.doctor-card__role {
-  font-size: 12px;
+.doc__role {
+  position: absolute;
+  top: 16px; left: 16px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: var(--tone);
+  color: var(--deep);
+  font-size: 13px;
   font-weight: 700;
-  color: var(--doc-accent, var(--blue-500));
-  margin-bottom: 12px;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
 }
 
-.doctor-card__bio {
-  font-size: 14px;
-  color: var(--gray-600);
-  line-height: 1.7;
-  margin-bottom: 16px;
+.doc__info {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  padding: 22px;
+  color: #fff;
+  transform: translateY(calc(100% - 92px));
+  transition: transform .7s var(--ease), background .5s;
 }
+.doc:hover .doc__info,
+.doc:focus-within .doc__info { transform: none; }
+.doc__info h3 { font-size: 20px; line-height: 1.2; margin-bottom: 14px; min-height: 48px; display: flex; align-items: flex-end; }
+.doc__info p { font-size: 14.5px; line-height: 1.55; opacity: .9; margin-bottom: 14px; }
+.doc__tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.doc__tags span { font-size: 12px; font-weight: 600; padding: 5px 10px; border-radius: 999px; background: rgba(255,255,255,.18); backdrop-filter: blur(6px); }
 
-.doctor-card__tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-bottom: 14px;
+/* Тач: інформацію видно одразу */
+@media (hover: none) {
+  .doc__info { transform: none; }
+  .doc__photo::after { background: linear-gradient(180deg, transparent 25%, rgba(20,38,63,.9) 100%); }
 }
-
-.doctor-tag {
-  background: white;
-  border-radius: var(--radius-full);
-  padding: 4px 12px;
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--gray-700);
-  border: 1.5px solid var(--gray-200);
-}
-
-.doctor-card__award {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--gray-500);
-}
-
-.doctor-card__award svg {
-  color: var(--doc-accent, var(--blue-400));
-  flex-shrink: 0;
-}
-
-@media (max-width: 900px) {
-  .doctors__grid {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
 @media (max-width: 640px) {
-  .doctors {
-    padding: 64px 0;
-  }
-
-  .doctors__grid {
-    grid-template-columns: 1fr;
-  }
+  .doctors__nav { display: none; }
 }

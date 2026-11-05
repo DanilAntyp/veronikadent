@@ -1,207 +1,136 @@
-import React, { useEffect } from 'react'
-import { FiPhone, FiMapPin, FiClock, FiInstagram, FiCalendar, FiHeart } from 'react-icons/fi'
+import React from 'react'
+import { FiPhone, FiMapPin, FiClock, FiInstagram, FiArrowUpRight, FiArrowUp } from 'react-icons/fi'
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
 import L from 'leaflet'
+import Logo from './Logo'
 import './Footer.css'
 
-// Fix leaflet marker icons
-delete L.Icon.Default.prototype._getIconUrl
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
-  iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
-  shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
-})
-
-// Clinic location: вул. Відродження 5, Крюківщина, Київська обл., 08136
+// вул. Відродження 5, Крюківщина, Київська обл., 08136
 const CLINIC_POS = [50.3812693, 30.3845729]
 const MAPS_URL = 'https://maps.app.goo.gl/6eArZnWYadFTx1R59?g_st=it'
 
-const navLinks = [
-  { href: '#about', label: 'Про нас' },
-  { href: '#services', label: 'Послуги' },
-  { href: '#doctors', label: 'Наші лікарі' },
-  { href: '#reviews', label: 'Відгуки' },
-]
+const pin = L.divIcon({
+  className: 'map-pin',
+  html: '<span class="map-pin__dot">🦷</span><span class="map-pin__pulse"></span>',
+  iconSize: [56, 56],
+  iconAnchor: [28, 28],
+  popupAnchor: [0, -28],
+})
 
-const services = [
-  'Дитяча стоматологія',
-  'Лікування під мікроскопом',
-  'Ортодонтія',
-  'Гігієна та відбілювання',
-  'Сімейна стоматологія',
+const nav = [
+  ['#about', 'Про нас'],
+  ['#services', 'Послуги'],
+  ['#prices', 'Ціни'],
+  ['#doctors', 'Лікарі'],
+  ['#gallery', 'Результати'],
+  ['#reviews', 'Відгуки'],
 ]
 
 export default function Footer({ onBooking }) {
-  const handleNav = (e, href) => {
+  const go = (e, href) => {
     e.preventDefault()
-    const el = document.querySelector(href)
-    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    document.querySelector(href)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
 
   return (
-    <footer className="footer" id="footer">
-      {/* Map section */}
-      <div className="footer__map-section">
-        <div className="container footer__map-inner">
-          <div className="footer__map-info">
-            <span className="section-tag">Як нас знайти</span>
-            <h2 className="footer__map-title">Ми поруч з вами</h2>
-            <div className="footer__contact-items">
-              <div className="footer__contact-item">
-                <div className="contact-icon">
-                  <FiMapPin size={18} />
-                </div>
-                <div>
-                  <strong>Адреса</strong>
-                  <a href={MAPS_URL} target="_blank" rel="noopener noreferrer">
-                    вул. Відродження 5, Крюківщина,<br/>Київська обл., 08136
-                  </a>
-                </div>
-              </div>
-              <div className="footer__contact-item">
-                <div className="contact-icon">
-                  <FiPhone size={18} />
-                </div>
-                <div>
-                  <strong>Телефон</strong>
-                  <a href="tel:0502121394">050 212 13 94</a>
-                </div>
-              </div>
-              <div className="footer__contact-item">
-                <div className="contact-icon">
-                  <FiClock size={18} />
-                </div>
-                <div>
-                  <strong>Графік роботи</strong>
-                  <span>Понеділок – Субота<br/>9:00 – 20:00</span>
-                </div>
-              </div>
-              <div className="footer__contact-item">
-                <div className="contact-icon">
-                  <FiInstagram size={18} />
-                </div>
-                <div>
-                  <strong>Instagram</strong>
-                  <a href="https://www.instagram.com/vero.nikadent/" target="_blank" rel="noopener noreferrer">@vero.nikadent</a>
-                </div>
-              </div>
-            </div>
-            <button className="btn-primary footer__cta" onClick={onBooking}>
-              <FiCalendar size={18} />
-              Записатися на прийом
+    <footer className="foot" id="contacts">
+      {/* Великий заклик */}
+      <div className="container">
+        <div className="cta" data-reveal="zoom">
+          <span className="cta__float cta__float--1" data-depth="30">🦷</span>
+          <span className="cta__float cta__float--2" data-depth="-24">✨</span>
+          <span className="cta__float cta__float--3" data-depth="18">💙</span>
+          <span className="eyebrow eyebrow--light">Запис на прийом</span>
+          <h2 className="cta__title">
+            Приходьте знайомитися —<br />
+            <span>без страху</span> і поспіху
+          </h2>
+          <div className="cta__actions">
+            <button className="btn btn--light" onClick={onBooking} data-magnetic>
+              Записатися онлайн <FiArrowUpRight size={18} />
             </button>
-          </div>
-
-          {/* Leaflet Map */}
-          <div className="footer__map-wrapper">
-            <MapContainer
-              center={CLINIC_POS}
-              zoom={17}
-              scrollWheelZoom={false}
-              style={{ width: '100%', height: '100%', borderRadius: '24px' }}
-              className="footer__leaflet"
-            >
-              <TileLayer
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              />
-              <Marker position={CLINIC_POS}>
-                <Popup>
-                  <div style={{ fontFamily: 'Nunito, sans-serif', fontWeight: 700, textAlign: 'center', padding: '8px' }}>
-                    <div style={{ fontSize: 24, marginBottom: 4 }}>🦷</div>
-                    <strong style={{ fontSize: 14, color: '#1F2937' }}>Vero.nikadent</strong>
-                    <br/>
-                    <span style={{ fontSize: 12, color: '#6B7280' }}>вул. Відродження 5, Крюківщина</span>
-                    <br/>
-                    <a href="tel:0502121394" style={{ fontSize: 12, color: '#2B90D9', fontWeight: 700 }}>050 212 13 94</a>
-                  </div>
-                </Popup>
-              </Marker>
-            </MapContainer>
-            <div className="map-pin-label">
-              <span>📍</span>
-              <span>Vero.nikadent</span>
-            </div>
+            <a href="tel:0502121394" className="cta__phone" data-magnetic>
+              <FiPhone size={18} /> 050 212 13 94
+            </a>
           </div>
         </div>
       </div>
 
-      {/* Footer bottom */}
-      <div className="footer__bottom">
-        <div className="container footer__bottom-inner">
-          {/* Logo */}
-          <div className="footer__logo-area">
-            <div className="footer__logo">
-              <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: 36, height: 36 }}>
-                <circle cx="18" cy="18" r="18" fill="rgba(184,228,250,0.3)"/>
-                <path d="M11 11 C11 8 14 7 18 9 C22 7 25 8 25 11 C26.5 17 25.5 23 23 28 C22 31 21 34 20 34 C19 34 18.5 30 17.5 27 L18 23 L18.5 27 C17.5 30 17 34 16 34 C15 34 14 31 13 28 C10.5 23 9.5 17 11 11Z" fill="rgba(255,255,255,0.8)" stroke="rgba(255,255,255,0.6)" strokeWidth="1"/>
-              </svg>
+      {/* Контакти + мапа */}
+      <div className="container foot__grid">
+        <div className="foot__info">
+          <span className="eyebrow" data-reveal>Як нас знайти</span>
+          <h2 className="foot__title" data-reveal style={{ '--d': '60ms' }}>Ми поруч з вами</h2>
+
+          <ul className="foot__contacts">
+            <li data-reveal style={{ '--d': '100ms' }}>
+              <span className="foot__ic"><FiMapPin /></span>
               <div>
-                <span className="footer-logo-name">Vero<span>.</span>nikadent</span>
-                <span className="footer-logo-sub">Стоматологія</span>
+                <small>Адреса</small>
+                <a href={MAPS_URL} target="_blank" rel="noopener noreferrer">вул. Відродження 5, Крюківщина, Київська обл., 08136</a>
               </div>
-            </div>
-            <p className="footer__tagline">
-              Де діти перестають боятися лікарів, а усмішки стають щасливішими.
-            </p>
-            <div className="footer__social">
-              <a href="https://www.instagram.com/vero.nikadent/" target="_blank" rel="noopener noreferrer" className="social-btn" aria-label="Instagram">
-                <FiInstagram size={20} />
-              </a>
-            </div>
-          </div>
-
-          {/* Nav */}
-          <div className="footer__col">
-            <h4>Навігація</h4>
-            <ul>
-              {navLinks.map(l => (
-                <li key={l.href}>
-                  <a href={l.href} onClick={e => handleNav(e, l.href)}>{l.label}</a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Services */}
-          <div className="footer__col">
-            <h4>Послуги</h4>
-            <ul>
-              {services.map((s, i) => (
-                <li key={i}><a href="#services" onClick={e => handleNav(e, '#services')}>{s}</a></li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Contact */}
-          <div className="footer__col">
-            <h4>Контакти</h4>
-            <ul>
-              <li>
-                <a href="tel:0502121394">📞 050 212 13 94</a>
-              </li>
-              <li>
-                <span>📅 пн–сб, 9:00–20:00</span>
-              </li>
-              <li>
-                <a href={MAPS_URL} target="_blank" rel="noopener noreferrer">📍 вул. Відродження 5, Крюківщина</a>
-              </li>
-              <li>
-                <a href="https://www.instagram.com/vero.nikadent/" target="_blank" rel="noopener noreferrer">
-                  📱 @vero.nikadent
-                </a>
-              </li>
-            </ul>
-          </div>
+            </li>
+            <li data-reveal style={{ '--d': '160ms' }}>
+              <span className="foot__ic"><FiPhone /></span>
+              <div>
+                <small>Телефон</small>
+                <a href="tel:0502121394">050 212 13 94</a>
+              </div>
+            </li>
+            <li data-reveal style={{ '--d': '220ms' }}>
+              <span className="foot__ic"><FiClock /></span>
+              <div>
+                <small>Графік роботи</small>
+                <span>Понеділок – Субота, 9:00 – 20:00</span>
+              </div>
+            </li>
+            <li data-reveal style={{ '--d': '280ms' }}>
+              <span className="foot__ic"><FiInstagram /></span>
+              <div>
+                <small>Instagram</small>
+                <a href="https://www.instagram.com/vero.nikadent/" target="_blank" rel="noopener noreferrer">@vero.nikadent</a>
+              </div>
+            </li>
+          </ul>
         </div>
 
-        <div className="footer__copy">
-          <div className="container">
-            <span>© {new Date().getFullYear()} Vero.nikadent. Всі права захищені.</span>
-            <span className="footer__made">
-              Зроблено з <FiHeart size={12} fill="currentColor" style={{ color: '#E8608A' }} /> для здорових усмішок
-            </span>
-          </div>
+        <div className="foot__map" data-reveal="clip">
+          <MapContainer center={CLINIC_POS} zoom={16} scrollWheelZoom={false} className="foot__leaflet">
+            <TileLayer
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            />
+            <Marker position={CLINIC_POS} icon={pin}>
+              <Popup>
+                <div className="map-pop">
+                  <strong>Vero.nikadent</strong>
+                  <span>вул. Відродження 5, Крюківщина</span>
+                  <a href={MAPS_URL} target="_blank" rel="noopener noreferrer">Прокласти маршрут →</a>
+                </div>
+              </Popup>
+            </Marker>
+          </MapContainer>
+          <a href={MAPS_URL} target="_blank" rel="noopener noreferrer" className="foot__route">
+            Відкрити в Google Maps <FiArrowUpRight />
+          </a>
+        </div>
+      </div>
+
+      {/* Низ */}
+      <div className="foot__bottom">
+        <div className="container foot__bar">
+          <Logo />
+          <nav className="foot__nav">
+            {nav.map(([h, l]) => <a key={h} href={h} onClick={(e) => go(e, h)}>{l}</a>)}
+          </nav>
+          <button className="foot__up" onClick={() => scrollTo({ top: 0, behavior: 'smooth' })} aria-label="Нагору">
+            <FiArrowUp size={20} />
+          </button>
+        </div>
+        <div className="foot__word" aria-hidden="true">Vero.nikadent</div>
+        <div className="container foot__copy">
+          <span>© {new Date().getFullYear()} Vero.nikadent. Всі права захищені.</span>
+          <span>Зроблено з 💙 для здорових усмішок</span>
         </div>
       </div>
     </footer>

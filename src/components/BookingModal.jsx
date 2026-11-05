@@ -1,78 +1,54 @@
-import React, { useEffect } from 'react'
-import { FiX, FiPhone, FiInstagram } from 'react-icons/fi'
+import React, { useEffect, useState } from 'react'
+import { FiX, FiPhone, FiInstagram, FiArrowUpRight, FiClock } from 'react-icons/fi'
+import { ToothMark } from './Logo'
 import './BookingModal.css'
 
 export default function BookingModal({ isOpen, onClose }) {
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = ''
-    }
-    return () => { document.body.style.overflow = '' }
-  }, [isOpen])
+  const [mounted, setMounted] = useState(isOpen)
+  const [closing, setClosing] = useState(false)
 
-  if (!isOpen) return null
+  useEffect(() => {
+    if (isOpen) { setMounted(true); setClosing(false) }
+    else if (mounted) {
+      setClosing(true)
+      const t = setTimeout(() => { setMounted(false); setClosing(false) }, 450)
+      return () => clearTimeout(t)
+    }
+  }, [isOpen]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    if (!isOpen) return
+    document.body.style.overflow = 'hidden'
+    const onKey = (e) => e.key === 'Escape' && onClose()
+    addEventListener('keydown', onKey)
+    return () => { document.body.style.overflow = ''; removeEventListener('keydown', onKey) }
+  }, [isOpen, onClose])
+
+  if (!mounted) return null
 
   return (
-    <div className="modal-overlay" onClick={e => e.target === e.currentTarget && onClose()}>
-      <div className="modal modal--contact">
-        <button className="modal__close" onClick={onClose} aria-label="Закрити">
-          <FiX size={20} />
-        </button>
+    <div className={`modal ${closing ? 'is-closing' : ''}`} onClick={(e) => e.target === e.currentTarget && onClose()} role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <div className="modal__card">
+        <button className="modal__close" onClick={onClose} aria-label="Закрити"><FiX size={20} /></button>
 
-        {/* Header */}
-        <div className="modal__header">
-          <div className="modal__logo">
-            <span>🦷</span>
-            <strong>Vero.nikadent</strong>
-          </div>
-          <h2 className="modal__title">Записатися на прийом</h2>
-          <p className="modal__sub">
-            Оберіть зручний спосіб зв'язку — ми відповімо якнайшвидше!
-          </p>
-        </div>
+        <div className="modal__badge"><ToothMark size={34} stroke="#fff" /></div>
+        <h2 className="modal__title" id="modal-title">Записатися на прийом</h2>
+        <p className="modal__sub">Оберіть зручний спосіб зв’язку — ми відповімо якнайшвидше!</p>
 
-        {/* Two big action buttons */}
-        <div className="modal__contact-options">
-          {/* Instagram option */}
-          <a
-            href="https://www.instagram.com/vero.nikadent/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="contact-option contact-option--instagram"
-            onClick={onClose}
-          >
-            <div className="contact-option__icon">
-              <FiInstagram size={32} />
-            </div>
-            <div className="contact-option__text">
-              <strong>Написати в Instagram</strong>
-              <span>@vero.nikadent</span>
-            </div>
-            <div className="contact-option__arrow">→</div>
+        <div className="modal__options">
+          <a href="tel:0502121394" className="opt opt--phone" onClick={onClose}>
+            <span className="opt__ic"><FiPhone size={24} /></span>
+            <span className="opt__txt"><strong>Зателефонувати</strong><small>050 212 13 94</small></span>
+            <FiArrowUpRight className="opt__arrow" size={22} />
           </a>
-
-          {/* Call option */}
-          <a
-            href="tel:0502121394"
-            className="contact-option contact-option--phone"
-            onClick={onClose}
-          >
-            <div className="contact-option__icon">
-              <FiPhone size={32} />
-            </div>
-            <div className="contact-option__text">
-              <strong>Зателефонувати</strong>
-              <span>050 212 13 94</span>
-            </div>
-            <div className="contact-option__arrow">→</div>
+          <a href="https://www.instagram.com/vero.nikadent/" target="_blank" rel="noopener noreferrer" className="opt opt--ig" onClick={onClose}>
+            <span className="opt__ic"><FiInstagram size={24} /></span>
+            <span className="opt__txt"><strong>Написати в Instagram</strong><small>@vero.nikadent</small></span>
+            <FiArrowUpRight className="opt__arrow" size={22} />
           </a>
         </div>
 
-        <p className="modal__hours">
-          📅 Працюємо пн – сб, 9:00 – 20:00
-        </p>
+        <p className="modal__hours"><FiClock /> Працюємо пн – сб, 9:00 – 20:00</p>
       </div>
     </div>
   )

@@ -1,46 +1,58 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useCallback } from 'react'
+import { FiCalendar } from 'react-icons/fi'
 import { useScrollReveal } from './hooks/useScrollReveal'
+import { useInteractions } from './hooks/useInteractions'
 import Header from './components/Header'
 import Hero from './components/Hero'
+import Marquee from './components/Marquee'
 import About from './components/About'
 import Services from './components/Services'
+import PriceList from './components/PriceList'
 import Doctors from './components/Doctors'
 import Gallery from './components/Gallery'
 import Reviews from './components/Reviews'
 import Footer from './components/Footer'
 import BookingModal from './components/BookingModal'
-import './App.css'
 
-function App() {
+export default function App() {
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [isScrolled, setIsScrolled] = useState(false)
+  const [priceTab, setPriceTab] = useState('prophylaxis')
 
   useScrollReveal()
+  useInteractions()
 
-  useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 60)
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
+  const openBooking = useCallback(() => setIsModalOpen(true), [])
+
+  const showPrices = useCallback((tab) => {
+    setPriceTab(tab)
+    document.getElementById('prices')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }, [])
 
   return (
-    <div className="app">
-      <Header
-        isScrolled={isScrolled}
-        onBooking={() => setIsModalOpen(true)}
-      />
+    <>
+      <div className="scroll-progress" />
+      <div className="cursor" />
+
+      <Header onBooking={openBooking} />
       <main>
-        <Hero onBooking={() => setIsModalOpen(true)} />
+        <Hero onBooking={openBooking} />
+        <Marquee />
         <About />
-        <Services />
+        <Services onShowPrices={showPrices} />
+        <PriceList tab={priceTab} setTab={setPriceTab} onBooking={openBooking} />
         <Doctors />
         <Gallery />
         <Reviews />
       </main>
-      <Footer onBooking={() => setIsModalOpen(true)} />
+      <Footer onBooking={openBooking} />
+
+      <div className="float-cta">
+        <button className="btn" onClick={openBooking}>
+          <FiCalendar size={18} /> Записатися на прийом
+        </button>
+      </div>
+
       <BookingModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
-    </div>
+    </>
   )
 }
-
-export default App

@@ -1,124 +1,135 @@
-import React from 'react'
-import { FiAward } from 'react-icons/fi'
+import React, { useRef } from 'react'
+import { FiArrowLeft, FiArrowRight } from 'react-icons/fi'
 import './Doctors.css'
 
 const doctors = [
   {
     name: 'Антипенко Вероніка',
     role: 'Дитячий лікар',
-    spec: 'Дитяча стоматологія, профілактика',
     bio: 'Лікує маленьких пацієнтів з теплом і турботою. Перетворює кожен візит на цікаву пригоду, щоб дітки не боялися лікаря.',
-    tags: ['Дитяча стоматологія', 'Профілактика', 'Молочні зуби'],
-    color: '#E8F4FD',
-    accent: '#2B90D9',
-    photo: '/images/doctors/Антипенко_Веронiка_Дитячий_лiкар.png',
+    tags: ['Дитяча стоматологія', 'Профілактика'],
+    tone: 'blue',
+    photo: '/images/opt/veronika.jpg',
   },
   {
-    name: 'Бойко Віолета Андріївна',
-    role: 'Пародонтолог',
-    spec: 'Пародонтологія, лікування ясен',
-    bio: "Фахівець із захворювань пародонту. Допомагає зберегти здоров'я ясен та зубів на довгі роки — уважно, без болю та з турботою.",
-    tags: ['Пародонтологія', 'Хірургія ясен', 'Профілактика'],
-    color: '#FDE8EE',
-    accent: '#E8608A',
-    photo: '/images/doctors/violeta.jpeg',
-  },
-  {
-    name: "Злигастєва Мар'яна",
-    role: 'Асистент лікаря',
-    spec: 'Асистування, підготовка кабінету',
-    bio: "Тепла та уважна асистентка, яка допомагає пацієнтам почуватися спокійно з першої хвилини. Завжди поруч та готова допомогти.",
-    tags: ['Асистування', 'Робота з дітьми', 'Підтримка'],
-    color: '#E8F4FD',
-    accent: '#2B90D9',
-    photo: '/images/doctors/maryana.jpeg',
+    name: 'Галушка Оксана Станіславівна',
+    role: 'Лікар-терапевт',
+    bio: 'Любить точність і результат, який видно одразу. Відновлює здоров’я та усмішки, робить складне — зрозумілим і безболісним.',
+    tags: ['Терапія', 'Відновлення зубів'],
+    tone: 'butter',
+    photo: '/images/doctors/Галушка_Оксана_Станіславівна_Лікар_терапевт.jpeg',
   },
   {
     name: 'Пахолюк Ганна Олександрівна',
     role: 'Ортодонт',
-    spec: 'Брекети, елайнери, корекція прикусу',
-    bio: 'Виправляє прикус та вирівнює зуби — для дітей і дорослих. Підходить індивідуально до кожного пацієнта та ретельно пояснює кожен крок лікування.',
-    tags: ['Ортодонтія', 'Брекети', 'Елайнери'],
-    color: '#F0FDF8',
-    accent: '#2BAD7E',
+    bio: 'Виправляє прикус та вирівнює зуби дітям і дорослим. Підходить індивідуально й ретельно пояснює кожен крок лікування.',
+    tags: ['Ортодонтія', 'Брекети'],
+    tone: 'mint',
     photo: '/images/doctors/hanna.jpeg',
+  },
+  {
+    name: 'Бойко Віолета Андріївна',
+    role: 'Пародонтолог',
+    bio: 'Фахівець із захворювань пародонту. Допомагає зберегти здоров’я ясен та зубів на довгі роки — уважно і без болю.',
+    tags: ['Пародонтологія', 'Здоров’я ясен'],
+    tone: 'rose',
+    photo: '/images/doctors/violeta.jpeg',
+  },
+  {
+    name: 'Злигастєва Мар’яна',
+    role: 'Асистент лікаря',
+    bio: 'Тепла та уважна асистентка, з якою пацієнти почуваються спокійно з першої хвилини.',
+    tags: ['Асистування', 'Робота з дітьми'],
+    tone: 'violet',
+    photo: '/images/doctors/maryana.jpeg',
   },
   {
     name: 'Покотило Ярослава',
     role: 'Асистент лікаря',
-    spec: 'Асистування, стерилізація, догляд',
-    bio: 'Відповідальна та дбайлива асистентка. Забезпечує ідеальний порядок у кабінеті та комфорт пацієнтів під час кожної процедури.',
-    tags: ['Асистування', 'Стерилізація', 'Комфорт'],
-    color: '#FDF6E8',
-    accent: '#D4943A',
+    bio: 'Забезпечує ідеальний порядок у кабінеті та комфорт пацієнтів під час кожної процедури.',
+    tags: ['Стерилізація', 'Комфорт'],
+    tone: 'blue',
     photo: '/images/doctors/yaroslava.jpeg',
   },
   {
     name: 'Швець Олена',
     role: 'Адміністратор',
-    spec: 'Запис пацієнтів, координація клініки',
-    bio: 'Перша посмішка, яку ви бачите в нашій клініці. Олена завжди готова відповісти на всі запитання та зручно організувати ваш візит.',
-    tags: ['Запис', 'Консультації', 'Організація'],
-    color: '#F8E8FE',
-    accent: '#9333EA',
+    bio: 'Перша посмішка, яку ви бачите в клініці. Відповість на всі запитання та зручно організує ваш візит.',
+    tags: ['Запис', 'Консультації'],
+    tone: 'butter',
     photo: '/images/doctors/olena.jpeg',
-  },
-  {
-    name: 'Галушка Оксана Станіславівна',
-    role: 'Лікар-терапевт',
-    spec: 'Терапевтична стоматологія, відновлення зубів',
-    bio: 'Я обрала стоматологію, тому що люблю точність, хочу допомагати людям і бачити результат своєї роботи відразу. Мені подобається відновлювати здоров\'я та посмішки, робити складне — зрозумілим і безболісним. Це професія, в якій постійно розвиваєшся і отримуєш реальний результат своєї праці.',
-    tags: ['Терапія', 'Відновлення зубів', 'Лікування карієсу'],
-    color: '#FDF6E8',
-    accent: '#D4943A',
-    photo: '/images/doctors/Галушка_Оксана_Станіславівна_Лікар_терапевт.jpeg',
   },
 ]
 
 export default function Doctors() {
+  const track = useRef(null)
+  const drag = useRef(null)
+
+  const scrollBy = (dir) => {
+    const el = track.current
+    const card = el.querySelector('.doc')
+    el.scrollBy({ left: dir * (card.offsetWidth + 20), behavior: 'smooth' })
+  }
+
+  // Перетягування мишею (на тач-екранах працює нативний скрол)
+  const onDown = (e) => {
+    if (e.pointerType !== 'mouse') return
+    drag.current = { x: e.clientX, left: track.current.scrollLeft, moved: false }
+    track.current.classList.add('is-drag')
+  }
+  const onMove = (e) => {
+    if (!drag.current) return
+    const dx = e.clientX - drag.current.x
+    if (Math.abs(dx) > 4) drag.current.moved = true
+    track.current.scrollLeft = drag.current.left - dx
+  }
+  const onUp = () => {
+    drag.current = null
+    track.current?.classList.remove('is-drag')
+  }
+
   return (
-    <section className="doctors" id="doctors">
-      <div className="doctors__blob" />
-      <div className="container">
-        <div className="doctors__header" data-reveal="up">
-          <span className="section-tag">Наша команда</span>
-          <h2 className="section-title">Наші лікарі</h2>
-          <p className="section-subtitle">
-            Команда фахівців, яка щиро любить свою роботу та кожного пацієнта. Ми навчаємось, вдосконалюємось та створюємо тільки позитивні враження.
-          </p>
+    <section className="doctors section" id="doctors">
+      <div className="container doctors__head">
+        <div>
+          <span className="eyebrow" data-reveal>Наша команда</span>
+          <h2 className="h2" data-reveal style={{ '--d': '60ms' }}>
+            Люди, яким <em>довіряють</em><br />найменші пацієнти
+          </h2>
         </div>
+        <div className="doctors__nav" data-reveal style={{ '--d': '120ms' }}>
+          <button onClick={() => scrollBy(-1)} aria-label="Попередні"><FiArrowLeft size={22} /></button>
+          <button onClick={() => scrollBy(1)} aria-label="Наступні"><FiArrowRight size={22} /></button>
+        </div>
+      </div>
 
-        <div className="doctors__grid">
-          {doctors.map((doc, i) => (
-            <div
-              key={i}
-              className="doctor-card"
-              style={{ '--doc-color': doc.color, '--doc-accent': doc.accent, '--reveal-delay': `${i * 80}ms` }}
-              data-reveal="up"
-            >
-              <div className="doctor-card__avatar">
-                <img src={doc.photo} alt={doc.name} loading="lazy" />
+      <div
+        className="doctors__track"
+        ref={track}
+        onPointerDown={onDown}
+        onPointerMove={onMove}
+        onPointerUp={onUp}
+        onPointerLeave={onUp}
+        data-cursor
+      >
+        {doctors.map((d, i) => (
+          <div className="doc-wrap" key={d.name} data-reveal style={{ '--d': `${i * 80}ms` }}>
+            <article className={`doc doc--${d.tone}`}>
+              <div className="doc__photo">
+                <img src={d.photo} alt={d.name} loading="lazy" draggable="false" />
               </div>
-
-              <div className="doctor-card__info">
-                <h3 className="doctor-card__name">{doc.name}</h3>
-                <p className="doctor-card__role">{doc.role}</p>
-                <p className="doctor-card__bio">{doc.bio}</p>
-
-                <div className="doctor-card__tags">
-                  {doc.tags.map((t, j) => (
-                    <span key={j} className="doctor-tag">{t}</span>
-                  ))}
-                </div>
-
-                <div className="doctor-card__award">
-                  <FiAward size={14} />
-                  <span>{doc.spec}</span>
+              <span className="doc__role">{d.role}</span>
+              <div className="doc__info">
+                <h3>{d.name}</h3>
+                <p>{d.bio}</p>
+                <div className="doc__tags">
+                  {d.tags.map((t) => <span key={t}>{t}</span>)}
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
+            </article>
+          </div>
+        ))}
+        <div className="doc-spacer" aria-hidden="true" />
       </div>
     </section>
   )

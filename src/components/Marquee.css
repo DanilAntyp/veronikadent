@@ -1,0 +1,31 @@
+.mq {
+  position: relative;
+  height: clamp(150px, 18vw, 220px);
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+}
+.mq__band {
+  position: absolute;
+  left: -5%; right: -5%;
+  padding: clamp(14px, 1.8vw, 22px) 0;
+  overflow: hidden;
+}
+.mq__band--blue { background: var(--blue); color: var(--cream); transform: rotate(-3deg); z-index: 2; box-shadow: 0 20px 40px rgba(30,90,156,.25); }
+.mq__band--rose { background: var(--rose-soft); color: var(--rose-deep); transform: rotate(2.5deg); }
+
+.mq__track { display: flex; width: max-content; animation: mq 32s linear infinite; }
+.mq__band--rose .mq__track { animation-direction: reverse; animation-duration: 40s; }
+.mq:hover .mq__track { animation-play-state: paused; }
+.mq__row { display: flex; flex-shrink: 0; }
+.mq__item {
+  font-family: var(--f-display);
+  font-size: clamp(20px, 3vw, 38px);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+}
+.mq__item i { font-style: normal; margin: 0 clamp(16px, 2.4vw, 34px); font-size: .7em; }
+@keyframes mq { to { transform: translateX(-50%); } }

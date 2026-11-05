@@ -1,31 +1,37 @@
 import { useEffect } from 'react'
 
 /**
- * Watches every element with a [data-reveal] attribute.
- * When the element enters the viewport it gets data-revealed="true",
- * which triggers the CSS animation defined in index.css.
- *
- * We use setAttribute instead of classList.add so that React's className
- * reconciliation never clobbers the reveal state on re-render.
+ * Спостерігає за всіма [data-reveal] (включно з тими, що з'являються пізніше —
+ * напр. після фільтрації прайсу) і ставить data-revealed, коли елемент у кадрі.
  */
 export function useScrollReveal() {
   useEffect(() => {
-    const observer = new IntersectionObserver(
+    const io = new IntersectionObserver(
       (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.setAttribute('data-revealed', 'true')
-            observer.unobserve(entry.target)
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.setAttribute('data-revealed', '')
+            io.unobserve(e.target)
           }
         })
       },
-      { threshold: 0.1, rootMargin: '0px 0px -60px 0px' }
+      { threshold: 0.12, rootMargin: '0px 0px -8% 0px' }
     )
 
-    document
-      .querySelectorAll('[data-reveal]')
-      .forEach((el) => observer.observe(el))
+    const scan = (root) => {
+      root.querySelectorAll?.('[data-reveal]:not([data-revealed])').forEach((el) => io.observe(el))
+    }
+    scan(document)
 
-    return () => observer.disconnect()
+    const mo = new MutationObserver((muts) => {
+      muts.forEach((m) => m.addedNodes.forEach((n) => {
+        if (n.nodeType !== 1) return
+        if (n.matches?.('[data-reveal]:not([data-revealed])')) io.observe(n)
+        scan(n)
+      }))
+    })
+    mo.observe(document.body, { childList: true, subtree: true })
+
+    return () => { io.disconnect(); mo.disconnect() }
   }, [])
 }

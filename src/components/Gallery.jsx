@@ -1,116 +1,121 @@
-import React, { useState } from 'react'
-import { FiChevronLeft, FiChevronRight } from 'react-icons/fi'
+import React, { useCallback, useRef, useState } from 'react'
+import { FiChevronLeft, FiChevronRight, FiMove } from 'react-icons/fi'
 import './Gallery.css'
 
-const interiorSlides = [
-  { label: 'Кабінет лікаря', emoji: '🏥', src: '/images/rooms/kabinet.jpeg' },
-  { label: 'Затишний простір',  emoji: '✨', src: '/images/rooms/room1.jpg' },
-  { label: 'Вхід до клініки',  emoji: '🚪', src: '/images/rooms/vkhod.jpg' },
+const rooms = [
+  { label: 'Кабінет лікаря', src: '/images/opt/kabinet.jpg' },
+  { label: 'Затишний простір', src: '/images/rooms/room1.jpg' },
+  { label: 'Вхід до клініки', src: '/images/rooms/vkhod.jpg' },
 ]
 
-const beforeAfter = [
-  {
-    before: '/images/before_after/before1.png',
-    after:  '/images/before_after/after1.png',
-    name: 'Результат лікування',
-    desc: 'Комплексне відновлення посмішки',
-  },
-  {
-    before: '/images/before_after/before2.png',
-    after:  '/images/before_after/after2.png',
-    name: 'Ортодонтія',
-    desc: 'Вирівнювання зубів та корекція прикусу',
-  },
+const cases = [
+  { before: '/images/opt/before1.jpg', after: '/images/opt/after1.jpg', name: 'Результат лікування', desc: 'Комплексне відновлення усмішки' },
+  { before: '/images/opt/before2.jpg', after: '/images/opt/after2.jpg', name: 'Ортодонтія', desc: 'Вирівнювання зубів та корекція прикусу' },
 ]
 
-export default function Gallery() {
-  const [currentSlide, setCurrentSlide] = useState(0)
-  const [beforeAfterIndex, setBeforeAfterIndex] = useState(0)
+/** Порівняння «до/після» з повзунком, який можна тягнути */
+function Compare({ item }) {
+  const ref = useRef(null)
+  const [pos, setPos] = useState(50)
+  const [touched, setTouched] = useState(false)
 
-  const prev = () => setCurrentSlide(c => (c - 1 + interiorSlides.length) % interiorSlides.length)
-  const next = () => setCurrentSlide(c => (c + 1) % interiorSlides.length)
+  const setFrom = useCallback((clientX) => {
+    const r = ref.current.getBoundingClientRect()
+    setPos(Math.min(100, Math.max(0, ((clientX - r.left) / r.width) * 100)))
+  }, [])
 
-  const prevBA = () => setBeforeAfterIndex(c => (c - 1 + beforeAfter.length) % beforeAfter.length)
-  const nextBA = () => setBeforeAfterIndex(c => (c + 1) % beforeAfter.length)
-
-  const slide = interiorSlides[currentSlide]
-  const ba = beforeAfter[beforeAfterIndex]
+  const onDown = (e) => {
+    setTouched(true)
+    ref.current.setPointerCapture(e.pointerId)
+    setFrom(e.clientX)
+  }
+  const onMove = (e) => {
+    if (e.buttons === 0 && e.pointerType === 'mouse') return
+    if (ref.current.hasPointerCapture(e.pointerId)) setFrom(e.clientX)
+  }
+  const onKey = (e) => {
+    if (e.key === 'ArrowLeft') setPos((p) => Math.max(0, p - 5))
+    if (e.key === 'ArrowRight') setPos((p) => Math.min(100, p + 5))
+  }
 
   return (
-    <section className="gallery" id="gallery">
+    <div
+      className={`cmp ${touched ? 'is-touched' : ''}`}
+      ref={ref}
+      onPointerDown={onDown}
+      onPointerMove={onMove}
+      style={{ '--pos': `${pos}%` }}
+      data-cursor
+    >
+      <img src={item.after} alt="Після лікування" draggable="false" />
+      <div className="cmp__before">
+        <img src={item.before} alt="До лікування" draggable="false" />
+      </div>
+      <span className="cmp__label cmp__label--b">До</span>
+      <span className="cmp__label cmp__label--a">Після</span>
+      <div
+        className="cmp__handle"
+        role="slider"
+        tabIndex={0}
+        aria-label="Порівняння до і після"
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-valuenow={Math.round(pos)}
+        onKeyDown={onKey}
+      >
+        <span><FiChevronLeft /><FiChevronRight /></span>
+      </div>
+      {!touched && <span className="cmp__hint"><FiMove /> Потягніть</span>}
+    </div>
+  )
+}
+
+export default function Gallery() {
+  const [ci, setCi] = useState(0)
+  const [top, setTop] = useState(0)
+
+  const order = rooms.map((_, i) => (i - top + rooms.length) % rooms.length)
+
+  return (
+    <section className="gallery section" id="gallery">
       <div className="container">
-        <div className="gallery__header" data-reveal="up">
-          <span className="section-tag">Галерея</span>
-          <h2 className="section-title">Наша клініка та результати</h2>
-          <p className="section-subtitle">Затишний простір, де кожна деталь продумана для вашого комфорту.</p>
+        <div className="gallery__head">
+          <span className="eyebrow" data-reveal>Результати та простір</span>
+          <h2 className="h2" data-reveal style={{ '--d': '60ms' }}>
+            Бачите <em>різницю?</em>
+          </h2>
         </div>
 
-        <div className="gallery__layout">
-          {/* Interior Photo Carousel */}
-          <div className="gallery__carousel" data-reveal="left">
-            <div className="gallery__slide">
-              <img
-                key={slide.src}
-                src={slide.src}
-                alt={slide.label}
-                className="gallery__slide-img"
-              />
-              <div className="gallery__slide-label">
-                <span>{slide.emoji}</span>
-                <span>{slide.label}</span>
+        <div className="gallery__grid">
+          <div className="gallery__cases" data-reveal="left">
+            <Compare key={ci} item={cases[ci]} />
+            <div className="gallery__case-bar">
+              <div>
+                <strong>{cases[ci].name}</strong>
+                <span>{cases[ci].desc}</span>
               </div>
-            </div>
-            <div className="gallery__controls">
-              <button className="gallery__btn" onClick={prev}><FiChevronLeft size={20}/></button>
-              <div className="gallery__dots">
-                {interiorSlides.map((_, i) => (
-                  <button
-                    key={i}
-                    className={`gallery__dot ${i === currentSlide ? 'gallery__dot--active' : ''}`}
-                    onClick={() => setCurrentSlide(i)}
-                  />
+              <div className="gallery__case-nav">
+                {cases.map((c, i) => (
+                  <button key={i} className={i === ci ? 'is-active' : ''} onClick={() => setCi(i)}>
+                    0{i + 1}
+                  </button>
                 ))}
               </div>
-              <button className="gallery__btn" onClick={next}><FiChevronRight size={20}/></button>
             </div>
           </div>
 
-          {/* Before / After with real photos */}
-          <div className="gallery__before-after" data-reveal="right">
-            <h3 className="gallery__ba-title">До і після 😊</h3>
-
-            <div className="gallery__ba-card">
-              <div className="ba-side ba-side--before">
-                <span className="ba-label ba-label--before">До</span>
-                <img src={ba.before} alt="До лікування" className="ba-photo" />
-              </div>
-              <div className="ba-divider">
-                <div className="ba-arrow">→</div>
-              </div>
-              <div className="ba-side ba-side--after">
-                <span className="ba-label ba-label--after">Після</span>
-                <img src={ba.after} alt="Після лікування" className="ba-photo" />
-              </div>
+          <div className="gallery__rooms" data-reveal="right">
+            <div className="stack" onClick={() => setTop((t) => (t + 1) % rooms.length)} data-cursor role="button" tabIndex={0}
+              onKeyDown={(e) => e.key === 'Enter' && setTop((t) => (t + 1) % rooms.length)}
+              aria-label="Наступне фото клініки">
+              {rooms.map((r, i) => (
+                <figure key={r.src} className="stack__card" style={{ '--o': order[i] }}>
+                  <img src={r.src} alt={r.label} loading="lazy" draggable="false" />
+                  <figcaption>{r.label}</figcaption>
+                </figure>
+              ))}
             </div>
-
-            <div className="gallery__ba-info">
-              <strong>{ba.name}</strong>
-              <span>{ba.desc}</span>
-            </div>
-
-            <div className="gallery__ba-controls">
-              <button className="gallery__btn" onClick={prevBA}><FiChevronLeft size={18}/></button>
-              <div className="gallery__dots">
-                {beforeAfter.map((_, i) => (
-                  <button
-                    key={i}
-                    className={`gallery__dot ${i === beforeAfterIndex ? 'gallery__dot--active' : ''}`}
-                    onClick={() => setBeforeAfterIndex(i)}
-                  />
-                ))}
-              </div>
-              <button className="gallery__btn" onClick={nextBA}><FiChevronRight size={18}/></button>
-            </div>
+            <p className="stack__hint">Натисніть, щоб погортати фото клініки</p>
           </div>
         </div>
       </div>

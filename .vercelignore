@@ -1,0 +1,5 @@
+src/images
+.claude
+dist
+.env.local
+.env*.local
